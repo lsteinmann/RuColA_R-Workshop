@@ -7,7 +7,7 @@ output:
     smaller: no
     widescreen: no
   beamer_presentation: default
-logo: RuColA_Logo.png
+logo: ../RuColA_Logo.png
 css: style.css
 ---
 
@@ -17,7 +17,7 @@ library(kableExtra)
 library(archdata)
 data("BACups")
 
-beazley <- read.csv(file = "data/prep/beazley_clean.csv", 
+beazley <- read.csv(file = "../data/prep/beazley_clean.csv", 
                     sep = ";", header = TRUE,
                     colClasses = c("character", "factor", "factor", 
                                    "factor", "integer", "integer", 
@@ -35,7 +35,7 @@ boxplot(BACups)
 
 ## Einfache Plots (base r)
 
-!["And if you labeled your axes, I could tell you exactly how MUCH better." (<https://xkcd.com/833/>)](convincing.png)
+!["And if you labeled your axes, I could tell you exactly how MUCH better." (<https://xkcd.com/833/>)](../convincing.png)
 
 Unser Plot lässt sich auch noch verbessern.
 

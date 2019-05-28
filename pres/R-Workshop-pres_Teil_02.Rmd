@@ -1,5 +1,5 @@
 ---
-title: 'R: _data science_ fÃƒÂ¼r ArchÃƒÂ¤olog*innen'
+title: 'R: _data science_ für Archäolog*innen'
 author: "L. Steinmann"
 date: "29 Mai 2019"
 output:
@@ -7,7 +7,7 @@ output:
     smaller: no
     widescreen: no
   beamer_presentation: default
-logo: RuColA_Logo.png
+logo: ../RuColA_Logo.png
 css: style.css
 ---
 
@@ -48,7 +48,7 @@ head(BACups)    # head() zeigt die ersten Zeilen eines data.frames
 Aus eigenen Tabellen: 
 
 ```{r, echo = TRUE, warning = FALSE}
-beazley <- read.csv(file = "data/prep/beazley_clean.csv", 
+beazley <- read.csv(file = "../data/prep/beazley_clean.csv", 
                     sep = ";", header = TRUE,
                     colClasses = c("character", "factor", "factor", 
                                    "factor", "integer", "integer", 

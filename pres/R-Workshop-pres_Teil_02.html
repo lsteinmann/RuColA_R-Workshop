@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>R: data science fÃƒÂ¼r ArchÃƒÂ¤olog*innen</title>
+  <title>R: data science für Archäolog*innen</title>
 
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -20,12 +20,12 @@
     var SLIDE_CONFIG = {
       // Slide settings
       settings: {
-                title: 'R: <em>data science</em> fÃƒÂ¼r ArchÃƒÂ¤olog*innen',
+                title: 'R: <em>data science</em> für Archäolog*innen',
                         useBuilds: true,
         usePrettify: true,
         enableSlideAreas: true,
         enableTouch: true,
-                        favIcon: 'RuColA_Logo.png',
+                        favIcon: '../RuColA_Logo.png',
               },
 
       // Author information
@@ -3098,7 +3098,7 @@ if (document.readyState !== "loading" &&
       position: absolute;
       bottom: 20px;
       left: 60px;
-      background: url(RuColA_Logo.png) no-repeat 0 50%;
+      background: url(../RuColA_Logo.png) no-repeat 0 50%;
       -webkit-background-size: 30px 30px;
       -moz-background-size: 30px 30px;
       -o-background-size: 30px 30px;
@@ -3159,7 +3159,7 @@ head(BACups)    # head() zeigt die ersten Zeilen eines data.frames</pre>
 
 <p>Aus eigenen Tabellen:</p>
 
-<pre class = 'prettyprint lang-r'>beazley &lt;- read.csv(file = &quot;data/prep/beazley_clean.csv&quot;, 
+<pre class = 'prettyprint lang-r'>beazley &lt;- read.csv(file = &quot;../data/prep/beazley_clean.csv&quot;, 
                     sep = &quot;;&quot;, header = TRUE,
                     colClasses = c(&quot;character&quot;, &quot;factor&quot;, &quot;factor&quot;, 
                                    &quot;factor&quot;, &quot;integer&quot;, &quot;integer&quot;, 

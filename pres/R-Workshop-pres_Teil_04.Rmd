@@ -7,14 +7,14 @@ output:
     smaller: no
     widescreen: no
   beamer_presentation: default
-logo: RuColA_Logo.png
+logo: ../RuColA_Logo.png
 css: style.css
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 library(kableExtra)
-beazley <- read.csv(file = "data/raw/beazley_sample_2000.csv", 
+beazley <- read.csv(file = "../data/raw/beazley_sample_2000.csv", 
                     sep = ";", 
                     header = TRUE)
 ```

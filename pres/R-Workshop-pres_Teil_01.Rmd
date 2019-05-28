@@ -3,11 +3,11 @@ title: 'R: _data science_ für Archäolog*innen'
 author: "L. Steinmann"
 date: "29. Mai 2019"
 output:
-  beamer_presentation: default
   ioslides_presentation:
     smaller: no
     widescreen: no
-logo: RuColA_Logo.png
+  beamer_presentation: default
+logo: ../RuColA_Logo.png
 css: style.css
 ---
 
@@ -16,14 +16,14 @@ knitr::opts_chunk$set(echo = FALSE)
 library(flextable)
 library(officer)
 library(magrittr)
-beazley <- read.csv(file = "data/prep/beazley_clean_v2.csv", 
+beazley <- read.csv(file = "../data/prep/beazley_clean_v2.csv", 
                sep = ";", 
                header = TRUE)
 ```
 
 ## R: _data science_ für Archäolog*innen
 
-![Der Mensch in dem grünen Shirt könntet ihr sein! (<http://explosm.net/comics/2964/>)](./statistics.png)
+![Der Mensch in dem grünen Shirt könntet ihr sein! (<http://explosm.net/comics/2964/>)](../statistics.png)
 
 
 ## R - Was überhaupt?
@@ -160,7 +160,7 @@ hist(c((beazley$DAT_max + beazley$DAT_min) / 2), breaks = 15, density = 25,
 ## RStudio
 
 ```{r}
-knitr::include_graphics("./02screenshot.png")
+knitr::include_graphics("../02screenshot.png")
 ```
 
 
