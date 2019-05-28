@@ -1,0 +1,266 @@
+---
+title: 'R: _data science_ für Archäolog*innen'
+author: "L. Steinmann"
+date: "29 Mai 2019"
+output:
+  ioslides_presentation:
+    smaller: no
+    widescreen: no
+  beamer_presentation: default
+logo: RuColA_Logo.png
+css: style.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+library(kableExtra)
+beazley <- read.csv(file = "data/raw/beazley_sample_2000.csv", 
+                    sep = ";", 
+                    header = TRUE)
+```
+
+
+## 'data wrangling'
+
+> Data wrangling [...] is the process of transforming and mapping data from one "raw" data form into another format with the intent of making it more appropriate and valuable for a variety of downstream purposes such as analytics. 
+
+<https://en.wikipedia.org/wiki/Data_wrangling>
+
+## Beispiel: Daten aus dem beazley-archive
+
+```{r eval=FALSE}
+beazley <- read.csv(file = "data/raw/beazley_sample_2000.csv", 
+                    sep = ";", 
+                    header = TRUE)
+str(beazley)
+```
+
+Spalten: `r colnames(beazley)`
+
+Was kann weg?
+
+## Beispiel: Daten aus dem beazley-archive
+
+Nutzliche Funktionen zum betrachten der Daten:
+```{r eval=FALSE}
+summary(x)     # Zusammenfassung alles Spalten
+unique(x)      # gibt die individuellen Werte von x zurück
+is.na(x)       # prüft alle Elemente in x auf NAs
+any(x)         # ist irgendein Element von x == TRUE?
+str(x)         # atomic vector-Klassen, überblick über Elemente
+```
+
+Alles auf den ganzen data.frame ODER auf einzelne Spalten anwendbar!
+
+## Beispiel: Daten aus dem beazley-archive
+
+Nur benutzbare Spalten behalten:
+
+```{r}
+beazley <- beazley[,c(2, 3, 4, 6, 7, 8)]
+```
+
+Spaltennamen: `r colnames(beazley)`
+
+## Daten umformatieren: Bereinigen
+```{r}
+# Löscht alle Zeilen, in denen nichts im Datierungsfeld steht.
+beazley <- beazley[-which(beazley$Date == ""),]
+head(unique(beazley$Date))
+# Speichert Date als character-vector! (statt als factor)
+beazley$Date <- as.character(beazley$Date)
+```
+
+## Daten umformatieren: strsplit()
+```{r}
+# kopiert mittels strsplit() alle Date-Werte in eine 
+# Liste in der neuen Spalte 'Date_new'
+beazley$Date_new <- strsplit(beazley$Date, " ")
+head(beazley$Date_new)
+```
+
+## Daten umformatieren: Vorbereitung
+```{r}
+# Anlegen von zwei neuen, leeren Spalten:
+beazley$DAT_min <- NA
+beazley$DAT_max <- NA
+#
+```
+
+## Daten umformatieren: for-Loop
+```{r}
+for (i in 1:nrow(beazley)) {
+  if (beazley$Date_new[i][[1]][1] == "to") {
+    print(paste("Vase-No. ", 
+                beazley$Vase.Number[i], 
+                " is undated. (", 
+                beazley$Date[i], ")", sep = ""))
+  } else {
+    beazley$DAT_min[i] <- beazley$Date_new[i][[1]][1]
+    beazley$DAT_max[i] <- beazley$Date_new[i][[1]][3]
+  }
+}
+```
+
+## Daten umformatieren: Bereinigen
+```{r}
+# löscht alle Zeilen, die keine richtige Datierung haben
+beazley <- beazley[-which(is.na(beazley$DAT_min)),]
+
+# entfernt die beiden nicht mehr benötigten Spalten
+beazley$Date_new <- NULL
+beazley$Date <- NULL
+
+# konvertiert die neue Datierung in numerisches Format
+beazley$DAT_min <- as.numeric(beazley$DAT_min)
+beazley$DAT_max <- as.numeric(beazley$DAT_max)
+```
+
+## Daten umformatieren: Vorbereitung, Shape.Name
+Es gibt zu viele redundante Merkmalsausprägungen in Shape.Name:
+```{r}
+unique(beazley$Shape.Name)
+```
+
+## Daten umformatieren: Shape.Names extrahieren
+```{r}
+names <- as.data.frame(matrix(ncol = 2, 
+                              nrow = length(
+                                unique(beazley$Shape.Name)
+                                            )))
+names$V1 <- as.character(unique(beazley$Shape.Name))
+names$V2  <- strsplit(names$V1, " ")
+names$V3 <- NA
+head(names)
+```
+
+## Daten umformatieren: Neue Namen suchen
+```{r}
+for (i in 1:nrow(names)) {
+    names$V3[i] <- names$V2[i][[1]][1]
+}
+```
+
+## Daten umformatieren: names bereinigen
+```{r}
+# Kommata löschen
+names$V3 <- gsub(names$V3, pattern = ",", replacement = "")
+# Fragezeichen löschen
+names$V3 <- gsub(names$V3, pattern = "(?)", 
+                 replacement = "", fixed = TRUE)
+unique(names$V3)
+```
+
+## Daten umformatieren: names noch etwas mehr bereinigen
+```{r}
+names$V3 <- gsub(names$V3, pattern = "PANATHENAIC", 
+                 replacement = "AMPHORA")
+names$V3 <- gsub(names$V3, pattern = "PSEUDO", 
+                 replacement = "AMPHORA")
+names$V3 <- gsub(names$V3, pattern = "UNKNOWN", 
+                 replacement = "NA")
+unique(names$V3)
+```
+
+## Daten umformatieren: Neue Namen für Gefäßformen eintragen
+```{r}
+# Löscht Spalte 2, die wir nicht mehr brauchen
+names$V2 <- NULL
+# eine neue Spalte namens 'Shape'
+beazley$Shape <- NA
+
+# Fügt die passende, neue Gefäßform in den dataframe ein:
+for (i in 1:nrow(names)) {
+  beazley$Shape[which(beazley$Shape.Name == names$V1[i])] <- names$V3[i]
+}
+# alte Spalte kann gelöscht werden
+beazley$Shape.Name <- NULL
+```
+
+## Daten umformatieren: Provenienz
+```{r}
+places <- as.data.frame(matrix(ncol = 2, 
+                               nrow = length(
+                                 unique(beazley$Provenance)
+                                        )))
+places$V1 <- as.character(unique(beazley$Provenance))
+places$V2  <- strsplit(places$V1, " ")
+
+
+places$V3 <- NA
+places$V4 <- NA
+places$V5 <- NA
+```
+
+
+## Daten umformatieren:  Provenienz
+```{r}
+for (i in 1:nrow(places)) {
+  places$V3[i] <- places$V2[i][[1]][1]
+  places$V4[i] <- places$V2[i][[1]][2]
+  places$V5[i] <- places$V2[i][[1]][3]
+}
+```
+
+
+## Daten umformatieren:  Provenienz
+```{r}
+for (i in 3:5) {
+  places[,i] <- gsub(places[,i], pattern = ",", 
+                     replacement = "")
+  places[,i] <- gsub(places[,i], pattern = "(?)", 
+                     replacement = "", fixed = TRUE)
+}
+```
+
+
+## Daten umformatieren:  Provenienz
+```{r}
+places$V2 <- NULL
+
+unique(places$V3)
+places$V3[which(is.na(places$V3))] <- "UNKNOWN"
+```
+
+
+## Daten umformatieren:  Provenienz
+```{r}
+for (i in 1:nrow(places)) {
+  if (places$V3[i] == "ATHENS" || places$V3[i] == "ATTICA" ) {
+    places$V5[i] <- places$V4[i]
+    places$V4[i] <- places$V3[i]
+    places$V3[i] <- "GREECE"
+  }
+}
+```
+
+
+## Daten umformatieren: Provenienz
+```{r}
+unique(places$V4)
+```
+
+## Daten umformatieren: Provenienz
+```{r}
+beazley$Provenance_full <- beazley$Provenance
+beazley$Provenance_city <- NA
+beazley$Provenance <- as.character(beazley$Provenance)
+
+for (i in 1:nrow(places)) {
+  beazley$Provenance[which(
+    beazley$Provenance_full == places$V1[i]
+                          )] <- places$V3[i]
+  beazley$Provenance_city[which(
+    beazley$Provenance_full == places$V1[i]
+                          )] <- places$V4[i]
+}
+unique(beazley$Provenance)
+```
+## Daten speichern
+```{r eval=FALSE}
+write.table(df, 
+            file = "data/prep/beazley_clean_v3.csv", 
+            sep = ";", 
+            col.names = TRUE, 
+            row.names = FALSE)
+```

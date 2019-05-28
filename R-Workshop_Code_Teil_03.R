@@ -76,9 +76,25 @@ ggplot(data = beazley, aes(x = Shape, fill = Technique)) +
   geom_bar(stat = "count")
 
 
+# xlim bestimmt, welche Werte in der x-Achse dargestellt werden
 ggplot(data = beazley, aes(x = Shape, fill = Technique)) +
   geom_bar(stat = "count", position = "dodge") +
   xlim(names(sort(table(beazley$Shape), decreasing=TRUE)[1:10]))
 
-
-
+# weitere verbesserungen
+ggplot(data = beazley, aes(x = Shape, fill = Technique)) +
+  geom_bar(stat = "count", position = "dodge") +
+  xlim(names(sort(table(beazley$Shape), decreasing=TRUE)[1:10])) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.y = element_line(linetype = "dashed", color = "gray16"),
+        legend.justification=c(1,0), legend.position=c(.95,0.7),
+        legend.box.background = element_rect(colour = "black")) +
+  labs(title = "Beazley Archive Pottery Database: Black- and Red-Figure Pottery Shapes",
+       subtitle = "the 10 most common shapes",
+       caption = "Source: https://www.beazley.ox.ac.uk/pottery/") +
+  ylab("Number of entries / vases") +
+  scale_fill_manual(values = c("gray30", "tomato3"))
+  

@@ -1,0 +1,168 @@
+---
+title: 'R: _data science_ fÃƒÂ¼r ArchÃƒÂ¤olog*innen'
+author: "L. Steinmann"
+date: "29 Mai 2019"
+output:
+  ioslides_presentation:
+    smaller: no
+    widescreen: no
+  beamer_presentation: default
+logo: RuColA_Logo.png
+css: style.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(kableExtra)
+```
+
+## Pakete
+
+'Erweiterungen' für R:CRAN (The Comprehensive R Archive Network, <https://cran.r-project.org/>) 
+Weitere Paketquelle: <https://github.com/topics/r> 
+
+```{r, eval = FALSE, echo = TRUE}
+install.packages("archdata")
+```
+
+(*archdata*: archäologische Beispieldaten, aus: David L. Carlson, *Quantitative Methods in Archaeology Using R* (2017).)
+
+```{r, eval = TRUE, echo = TRUE, warning=FALSE}
+library("archdata")
+```
+
+
+## Daten laden
+
+Aus Datenpaketen: 
+```{r, echo = TRUE, eval = FALSE}
+?"archdata"     # Lädt die Hilfe / Dokumentation des Pakets
+```
+```{r, echo = TRUE, warning = FALSE}
+data(BACups)    # Erstellt automatisch das gewünschte Objekt
+head(BACups)    # head() zeigt die ersten Zeilen eines data.frames
+```
+
+## Daten laden
+
+Aus eigenen Tabellen: 
+
+```{r, echo = TRUE, warning = FALSE}
+beazley <- read.csv(file = "data/prep/beazley_clean.csv", 
+                    sep = ";", header = TRUE,
+                    colClasses = c("character", "factor", "factor", 
+                                   "factor", "integer", "integer", 
+                                   "factor"))
+```
+
+(Außer `read.csv()` gibt es noch weitere Funktionen! Zum Nachlesen: <https://www.datacamp.com/community/tutorials/r-data-import-tutorial>)
+
+```{r, echo = TRUE, eval = FALSE}
+head(beazley)  # head() zeigt die ersten Zeilen eines data.frames
+str(beazley)   # str() zeigt die Eigenschaften eines Objektes
+```
+
+
+## Deskriptive Statistik
+
+* **BACups**: `r nrow(BACups)` Zeilen/Objekte mit 5 stetigen, numerischen und 1 diskreten nominalskalierten Variable
+  * Randdurchmesser, Halsdurchmesser, Schulterdurchmesser, Höhe, Höhe des Halses, Phase
+
+* **beazley**: `r nrow(beazley)` Zeilen/Objekte mit 7 Variablen. ... Was für welche?
+  * ID im Beazley-Archive, Fabric, Technik, Herkunft (Land), unteres Ende der Datierungsspanne, oberes Ende der Datierungsspanne, Gefäßform
+
+
+
+## Deskriptive Statistik
+
+Nützliche Funktionen:
+
+```{r, echo = TRUE, eval = FALSE}
+mean(BACups$RD)       # arithmetisches Mittel
+median(BACups$RD)     # Median (Mittelwert)
+# für den mode / Modus gibt es keine Funktion!
+range(BACups$RD)      # kleinster und größter Wert in einer Liste
+min(BACups$RD)        # Kleinster Wert
+max(BACups$RD)        # Größter Wert
+```
+
+## Deskriptive Statistik
+
+Nützliche funktionen: Häufigkeitstabellen!
+
+```{r, echo = TRUE, eval = FALSE}
+table(BACups$Phase) 
+table(beazley$Technique, beazley$Shape) 
+```
+
+## Exkurs: Funktionen!
+
+```{r, echo = TRUE, eval = FALSE}
+# Häufigkeitstabelle des gewünschten Vektors anlegen:
+tbl <- table(BACups$RD)
+
+# Was ist der höchste Wert in der Tabelle? (Höchstgezählter Wert)
+tbl_wmax <- which.max(tbl)
+
+# Welchem Wert aus tbl entspricht das?
+tbl_max <- tbl[tbl_wmax]
+
+# wie heißt der Wert? 
+names(tbl_max)
+
+# Das alles lässt sich auch in einer Zeile machen:
+table(BACups$RD)[which.max(table(BACups$RD))]
+```
+
+
+## Exkurs: Funktionen!
+
+Der Modus funktioniert sowohl für stetige als auch für diskrete Daten, macht bei letzteren aber mehr Sinn.
+
+
+```{r, echo = TRUE, eval = TRUE}
+get.mode <- function(vector) {
+  tbl <- table(vector)
+  tbl_wmax <- which.max(tbl)
+  tbl_max <- tbl[tbl_wmax]
+  tbl_namemax <- names(tbl_max)
+  return(tbl_namemax)
+}
+```
+
+
+
+## Exkurs: Funktionen!
+
+
+```{r, echo = TRUE, eval = TRUE}
+get.mode <- function(vector) {
+  tbl <- table(vector)
+  tbl_wmax <- which.max(tbl)
+  tbl_max <- tbl[tbl_wmax]
+  tbl_namemax <- names(tbl_max)
+  return(tbl_namemax)
+}
+
+get.mode(BACups$RD)
+get.mode(beazley$Shape)
+```
+
+## Deskriptive Statistik
+
+```{r, eval=FALSE, echo = TRUE}
+# Kategorien auslesen
+BA_Phases <- unique(BACups$Phase)
+BA_Phases
+
+# Speichern der Indizes für beide Phasen in eigenen vectors
+ind_BA_phase_a <- which(BACups$Phase == BA_Phases[1])
+ind_BA_phase_b <- which(BACups$Phase == BA_Phases[2])
+
+# Mittelwert für beide Phasen
+mean(BACups$RD[ind_BA_phase_a])
+mean(BACups$RD[ind_BA_phase_b])
+
+# Ein weiterer Weg ans Ziel: 
+aggregate(formula = RD ~ Phase, data = BACups, FUN = mean)
+``` 
