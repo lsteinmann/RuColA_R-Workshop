@@ -1,0 +1,275 @@
+---
+title: 'R: _data science_ fÃ¼r ArchÃ¤olog*innen'
+author: "L. Steinmann"
+date: "29. Mai 2019"
+output:
+  beamer_presentation: default
+  ioslides_presentation:
+    smaller: no
+    widescreen: no
+logo: RuColA_Logo.png
+css: style.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(flextable)
+library(officer)
+library(magrittr)
+beazley <- read.csv(file = "data/prep/beazley_clean_v2.csv", 
+               sep = ";", 
+               header = TRUE)
+```
+
+## R: _data science_ für Archäolog*innen
+
+![Der Mensch in dem grünen Shirt könntet ihr sein! (<http://explosm.net/comics/2964/>)](./statistics.png)
+
+
+## R - Was überhaupt?
+
+* R ist eine Programmiersprache (Interpretersprache)
+* Zugeschnitten auf die statistische Auswertung von Daten vieler Art
+* Tool zur Erstellung von Grafiken (Diagramme, Schaubilder, Karten - nahezu alles ist möglich)
+
+Was ist so toll daran?
+
+* Alle Betriebssysteme!
+* OpenSource!
+* Reproduzierbar!
+* Flexibel!
+
+
+
+## Archäologische Daten in Tabellenform
+
+```{r, echo = FALSE}
+displaytable <- function(df) {
+  df %>% 
+  regulartable() %>% 
+  autofit() %>%
+  bg(bg = "slategray2", part = "header") %>%
+  bg(bg = "snow2", part = "body") %>%
+  padding(padding = 1, part = "all") %>%
+  border_inner_h(part="all", border = fp_border(color="gray35")) %>%
+  border_inner_v(part="all", border = fp_border(color="gray35")) %>%
+  bold(part = "header")
+}
+
+align(displaytable(beazley[sample(1:nrow(beazley), size = 10),]), align = "center", j = c(5, 6), part = "all")
+```
+
+<p> </p>
+
+<p class="bildunterschrift">*Beispiel 1*: Tabelle mit (bereinigten) Daten aus der Beazley Archive Pottery Database (<https://www.beazley.ox.ac.uk/pottery/default.htm>)</p>
+
+## Was tun damit?
+
+```{r summary, echo = TRUE}
+str(beazley)
+```
+
+## Zählen!
+
+```{r, echo = TRUE}
+table(beazley$Technique)
+```
+
+```{r, echo = TRUE}
+head(table(beazley$Shape))
+```
+
+
+
+## Diagramme!
+
+```{r, echo = TRUE}
+barplot(table(beazley$Technique))
+```
+
+## Schönere Diagramme!
+
+```{r, echo = TRUE, fig.align='center', fig.width=7, fig.height=3}
+barplot(table(beazley$Technique), 
+        main = "Beazley-Archive: Schwarz- und Rotfigurige Keramik",
+        ylab = "Anzahl", xlab = "Technik", ylim = c(0,40000),
+        col = c("gray16", "orangered3"))
+```
+
+## Andere Diagramme!
+
+```{r, echo = FALSE, fig.align='center', fig.width=7, fig.height=5}
+tbl <- table(beazley$Shape)
+tbl <- tbl[which(tbl > 1000)]
+barplot(tbl, main = "Beazley-Archive: Gefäßformen", cex.names = 0.8,
+        ylab = "Anzahl", xlab = "Form", ylim = c(0,20000),
+        col = rainbow(n = length(tbl)))
+```
+
+## Sortierte Diagramme!
+
+```{r, echo = FALSE, fig.align='center', fig.width=7, fig.height=5}
+tbl <- table(beazley$Shape)
+tbl <- tbl[which(tbl > 1000)]
+barplot(sort(tbl, decreasing = TRUE), 
+        main = "Beazley-Archive: Gefäßformen", cex.names = 0.8,
+        ylab = "Anzahl", xlab = "Form", ylim = c(0,20000),
+        col = rainbow(n = length(tbl)))
+```
+
+## Kompliziertere sortierte Diagramme!
+
+```{r, echo = FALSE, fig.align='center', fig.width=7, fig.height=5}
+tbl <- table(beazley$Technique, beazley$Shape)
+tbl <- tbl[, which(colSums(tbl) > 1000)]
+barplot(tbl[,order(tbl[1,], decreasing = TRUE)],
+        main = "Beazley-Archive: Gefäßformen", cex.names = 0.8,
+        ylab = "Anzahl", xlab = "Form", ylim = c(0,12000),
+        col = c("gray16", "orangered3"), beside=TRUE, legend = rownames(tbl))
+
+```
+
+
+## Kurvendiagramme!
+
+```{r, echo = TRUE, fig.align='center', fig.width=7, fig.height=4}
+plot(density(beazley$DAT_min, bw = 25), col = "red", 
+     main = "Untere (rot) und obere (grün) Datierungen aus dem Beazley-Archive")
+lines(density(beazley$DAT_max, bw = 25), col = "green")
+```
+
+## Histogramme!
+
+```{r, echo = TRUE, fig.align='center', fig.width=7, fig.height=4}
+hist(c((beazley$DAT_max + beazley$DAT_min) / 2), breaks = 15, density = 25,
+     main = "Histogramm der durchschnittlichen Datierungen aus dem Beazley-Archive")
+```
+
+
+## Voraussetzungen
+
+* Benötigte Software: 
+  + Tabellenkalkulationsprogramm (Excel, LibreOffice Calc)
+  + R
+  + RStudio
+* Daten!
+* Grundverständnis für die Arten von verfügbaren Daten und ein bisschen statistische Terminologie
+  + ... 
+
+
+## RStudio
+
+```{r}
+knitr::include_graphics("./02screenshot.png")
+```
+
+
+## Einfache Rechenoperationen
+
+
+```{r, echo = TRUE}
+2 + 5     # Addition
+5 - 2     # Subtraktion
+2 * 5     # Multiplikation
+```
+
+## Einfache Rechenoperationen
+
+```{r, echo = TRUE}
+5 / 2     # Division
+3 ^ 2     # Exponent
+sqrt(9)   # Wurzel
+```
+
+## Variablen verwenden (vector)
+
+```{r, echo = TRUE}
+a <- 2
+zahlen <- c(1,2,3,4,5)
+a * zahlen
+zahlen <- 5:10
+zahlen 
+zahlen[2]
+```
+
+
+## Logische Operatoren
+
+```{r, echo = TRUE}
+9 == 2 
+9 != 2
+9 > 2
+```
+
+## Logische Operatoren
+
+```{r, echo = TRUE}
+9 >= 2
+9 < 2
+9 <= 2
+```
+
+## Matrix
+
+```{r, echo = TRUE}
+mat_zahlen <- matrix(nrow = 4, ncol = 5)
+mat_zahlen[,1:5] <- c(1:4)
+mat_zahlen[,1]
+mat_zahlen[1,]
+```
+
+## data.frame
+```{r, echo = TRUE}
+df_zahlen <- data.frame("Eins" = 1:4, "Zwei" = 1:4, "Drei" = 1:4)
+df_zahlen[,1]
+df_zahlen$Eins
+
+df_zahlen
+```
+
+
+## Datentypen: diskret und stetig
+
+  * **diskrete Daten**/kategoriale Daten: potenziell bekannte Anzahl von abzählbar viele Merkmalsausprägungen (bspw. Fibeltyp oder Anzahl von Henkeln an einem Gefäß)
+  * **stetige Daten**: prinzipiell numerisch; individuelle, nicht gruppierbare Werte: alles, was auf einem Kontinuum liegen kann (bspw. Randdurchmesser, Wandstärken)
+  
+Qualitative Daten (Bezeichnungen, Typen, Orte, Datierung in Epochen usw. usf.) müssen wir immer als diskret behandeln. Quantitative Daten (Maße, Alter in Zahlen) im Normalfall als stetig.
+  
+(Zum Nachlesen: <https://de.wikipedia.org/wiki/Merkmal> oder <https://www.crashkurs-statistik.de/merkmals-und-skalentypen/>)
+    
+## Datentypen: Skalentypen
+
+  * **Nominalskaliert**: nicht zu Ordnen, endliche Anzahl (immer diskret/kategorial; bspw. Fundorte, Farben)  
+  * **Ordinalskaliert**: festgelegte Reihenfolge (Typ 1 kommt **vor** Typ 2, Objekt A hat **mehr** Henkel als Objekt B)
+  * **Intervallskaliert**: immer numerisch, unendlich viele Ausprägung, bspw. Datierungen
+  * **Verhältnisskaliert**: immer numerisch, Daten mit einem Nullpunkt, bspw. Maße
+
+(<https://de.wikipedia.org/wiki/Skalenniveau> oder <https://www.crashkurs-statistik.de/merkmals-und-skalentypen/>)
+
+## Datentypen: atomic vectors in R
+
+* **atomic vector types**:
+  * **character**:  (Nicht-diskrete Zeichenketten, immer in " " (bspw: "hallo", "das ist ein ganzer Satz"))
+  * **factor**:     diskrete Zeichenketten (für nominalskalierte Daten)
+  * **numeric**:    Zahlen (Auch Dezimalzahlen)
+  * **integer**:    Ganzzahlen
+  * **logical**:    ja/nein: TRUE oder FALSE (boolean variable/boolesche Variable)
+  * (**complex**:    betrifft uns nicht, kann imaginäre zahlen enthalten)
+
+(<https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/>)
+
+## Datentypen in R
+
+```{r, echo = TRUE}
+df_datentypen <- data.frame("character" = 1:4, "factor" = 1:4, 
+                            "numeric" = 1:4, "integer" = 1:4, 
+                            "logical" = 1:4)
+df_datentypen$character <- as.character(c("G", "BB", "Hasen", "Kühe auch"))
+df_datentypen$factor <- as.factor(c("a", "a", "b", "b"))
+df_datentypen$numeric <- as.numeric(c(2, 4, 5.5, 10))
+df_datentypen$integer <- as.integer(c(3,7,9,11))
+df_datentypen$ logical <- as.logical(TRUE, FALSE, TRUE, FALSE)
+str(df_datentypen)
+```
+
+
