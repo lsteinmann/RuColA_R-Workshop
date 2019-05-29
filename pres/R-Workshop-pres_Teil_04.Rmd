@@ -26,6 +26,8 @@ beazley <- read.csv(file = "../data/raw/beazley_sample_2000.csv",
 
 <https://en.wikipedia.org/wiki/Data_wrangling>
 
+-> R ist sehr gut geeignet um Daten in ein anderen Format zu bringen.
+
 ## Beispiel: Daten aus dem beazley-archive
 
 ```{r eval=FALSE}
@@ -43,10 +45,11 @@ Was kann weg?
 
 Nutzliche Funktionen zum betrachten der Daten:
 ```{r eval=FALSE}
-summary(x)     # Zusammenfassung alles Spalten
+summary(x)     # Zusammenfassung aller Spalten
 unique(x)      # gibt die individuellen Werte von x zurück
 is.na(x)       # prüft alle Elemente in x auf NAs
 any(x)         # ist irgendein Element von x == TRUE?
+any(is.na(x))  # Gibt es mindestens einen NA-Wert in x?
 str(x)         # atomic vector-Klassen, überblick über Elemente
 ```
 

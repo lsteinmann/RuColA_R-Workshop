@@ -3136,6 +3136,8 @@ if (document.readyState !== "loading" &&
 
 <p><a href='https://en.wikipedia.org/wiki/Data_wrangling' title=''>https://en.wikipedia.org/wiki/Data_wrangling</a></p>
 
+<p>-&gt; R ist sehr gut geeignet um Daten in ein anderen Format zu bringen.</p>
+
 </article></slide><slide class=""><hgroup><h2>Beispiel: Daten aus dem beazley-archive</h2></hgroup><article  id="beispiel-daten-aus-dem-beazley-archive">
 
 <pre class = 'prettyprint lang-r'>beazley &lt;- read.csv(file = &quot;data/raw/beazley_sample_2000.csv&quot;, 
@@ -3151,10 +3153,11 @@ str(beazley)</pre>
 
 <p>Nutzliche Funktionen zum betrachten der Daten:</p>
 
-<pre class = 'prettyprint lang-r'>summary(x)     # Zusammenfassung alles Spalten
+<pre class = 'prettyprint lang-r'>summary(x)     # Zusammenfassung aller Spalten
 unique(x)      # gibt die individuellen Werte von x zurück
 is.na(x)       # prüft alle Elemente in x auf NAs
 any(x)         # ist irgendein Element von x == TRUE?
+any(is.na(x))  # Gibt es mindestens einen NA-Wert in x?
 str(x)         # atomic vector-Klassen, überblick über Elemente</pre>
 
 <p>Alles auf den ganzen data.frame ODER auf einzelne Spalten anwendbar!</p>
