@@ -98,3 +98,4 @@ ggplot(data = beazley, aes(x = Shape, fill = Technique)) +
   ylab("Number of entries / vases") +
   scale_fill_manual(values = c("gray30", "tomato3"))
   
+

@@ -1,7 +1,7 @@
 ---
 title: 'R: _data science_ für Archäolog*innen'
 author: "L. Steinmann"
-date: "29. Mai 2019"
+date: "27. November 2019"
 output:
   ioslides_presentation:
     smaller: no
@@ -23,6 +23,11 @@ beazley <- read.csv(file = "../data/prep/beazley_clean_v2.csv",
 
 ## R: _data science_ für Archäolog*innen
 
+> Data Science ist ein interdisziplinäres Wissenschaftsfeld, welches wissenschaftlich fundierte Methoden, Prozesse, Algorithmen und Systeme zur Extraktion von Erkenntnissen, Mustern und Schlüssen sowohl aus strukturierten als auch unstrukturierten Daten ermöglicht.
+> --- <https://de.wikipedia.org/wiki/Data_Science>
+
+
+## R: _data science_ für Archäolog*innen
 ![Der Mensch in dem grünen Shirt könntet ihr sein! (<http://explosm.net/comics/2964/>)](../statistics.png)
 
 
@@ -134,15 +139,18 @@ barplot(tbl[,order(tbl[1,], decreasing = TRUE)],
 
 ```{r, echo = TRUE, fig.align='center', fig.width=7, fig.height=4}
 plot(density(beazley$DAT_min, bw = 25), col = "red", 
-     main = "Untere (rot) und obere (grün) Datierungen aus dem Beazley-Archive")
+     main = "Untere (rot) und obere (grün) Datierungen 
+     aus dem Beazley-Archive")
 lines(density(beazley$DAT_max, bw = 25), col = "green")
 ```
 
 ## Histogramme!
 
 ```{r, echo = TRUE, fig.align='center', fig.width=7, fig.height=4}
-hist(c((beazley$DAT_max + beazley$DAT_min) / 2), breaks = 15, density = 25,
-     main = "Histogramm der durchschnittlichen Datierungen aus dem Beazley-Archive")
+hist(c((beazley$DAT_max + beazley$DAT_min) / 2), 
+     breaks = 15, density = 25,
+     main = "Histogramm der durchschnittlichen Datierungen 
+     aus dem Beazley-Archive")
 ```
 
 
@@ -156,19 +164,19 @@ hist(c((beazley$DAT_max + beazley$DAT_min) / 2), breaks = 15, density = 25,
 * Grundverständnis für die Arten von verfügbaren Daten und ein bisschen statistische Terminologie
   
 
+
+## Workshopdateien
+
+<https://github.com/lsteinmann/RuColA_R-Workshop>
+
+![](../03screenshot.png)
+
+
 ## RStudio
 
 ```{r}
 knitr::include_graphics("../02screenshot.png")
 ```
-
-
-## Workshopdateien
-
-https://github.com/lsteinmann/RuColA_R-Workshop
-
-![](../03screenshot.png)
-
 
 
 ## Einfache Rechenoperationen
@@ -242,7 +250,7 @@ df_zahlen
   
 Qualitative Daten (Bezeichnungen, Typen, Orte, Datierung in Epochen usw. usf.) müssen wir immer als diskret behandeln. Quantitative Daten (Maße, Alter in Zahlen) im Normalfall als stetig.
   
-(Zum Nachlesen: <https://de.wikipedia.org/wiki/Merkmal> oder <https://www.crashkurs-statistik.de/merkmals-und-skalentypen/>)
+<p class="kleiner">(Zum Nachlesen: <https://de.wikipedia.org/wiki/Merkmal> oder <https://www.crashkurs-statistik.de/merkmals-und-skalentypen/>)</p>
     
 ## Datentypen: Skalentypen
 
@@ -251,7 +259,7 @@ Qualitative Daten (Bezeichnungen, Typen, Orte, Datierung in Epochen usw. usf.) m
   * **Intervallskaliert**: immer numerisch, unendlich viele Ausprägung, bspw. Datierungen
   * **Verhältnisskaliert**: immer numerisch, Daten mit einem Nullpunkt, bspw. Maße
 
-(<https://de.wikipedia.org/wiki/Skalenniveau> oder <https://www.crashkurs-statistik.de/merkmals-und-skalentypen/>)
+<p class="kleiner">(<https://de.wikipedia.org/wiki/Skalenniveau> oder <https://www.crashkurs-statistik.de/merkmals-und-skalentypen/>)</p>
 
 ## Datentypen: atomic vectors in R
 
@@ -263,7 +271,7 @@ Qualitative Daten (Bezeichnungen, Typen, Orte, Datierung in Epochen usw. usf.) m
   * **logical**:    ja/nein: TRUE oder FALSE (boolean variable/boolesche Variable)
   * (**complex**:    betrifft uns nicht, kann imaginäre zahlen enthalten)
 
-(<https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/>)
+<p class="kleiner">(<https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/>)</p>
 
 ## Datentypen in R
 
@@ -271,11 +279,23 @@ Qualitative Daten (Bezeichnungen, Typen, Orte, Datierung in Epochen usw. usf.) m
 df_datentypen <- data.frame("character" = 1:4, "factor" = 1:4, 
                             "numeric" = 1:4, "integer" = 1:4, 
                             "logical" = 1:4)
-df_datentypen$character <- as.character(c("G", "BB", "Hasen", "Kühe auch"))
+df_datentypen$character <- as.character(c("Milet ist eine Stadt", 
+                                          "Gras ist grün", 
+                                          "Dies ist ein string", 
+                                          "Kuchen"))
 df_datentypen$factor <- as.factor(c("a", "a", "b", "b"))
 df_datentypen$numeric <- as.numeric(c(2, 4, 5.5, 10))
 df_datentypen$integer <- as.integer(c(3,7,9,11))
 df_datentypen$ logical <- as.logical(TRUE, FALSE, TRUE, FALSE)
+```
+
+## Datentypen in R
+
+str(): "Compactly Display The Structure Of An Arbitrary R Object"
+
+<p class="kleiner">(<https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str>)</p>
+
+```{r, echo = TRUE}
 str(df_datentypen)
 ```
 

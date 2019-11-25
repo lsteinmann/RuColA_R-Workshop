@@ -1,7 +1,7 @@
 ---
 title: 'R: _data science_ für Archäolog*innen'
 author: "L. Steinmann"
-date: "29 Mai 2019"
+date: "27 November 2019"
 output:
   ioslides_presentation:
     smaller: no
@@ -20,15 +20,17 @@ beazley <- read.csv(file = "../data/raw/beazley_sample_2000.csv",
 ```
 
 
-## 'data wrangling'
+## Datenmanipulation
+
+Oder:
 
 > Data wrangling [...] is the process of transforming and mapping data from one "raw" data form into another format with the intent of making it more appropriate and valuable for a variety of downstream purposes such as analytics. 
 
 <https://en.wikipedia.org/wiki/Data_wrangling>
 
--> R ist sehr gut geeignet um Daten in ein anderen Format zu bringen.
+-> R ist sehr gut geeignet um Daten in ein anderes Format zu bringen.
 
-## Beispiel: Daten aus dem beazley-archive
+## Beispiel: Originaldaten aus dem beazley-archive
 
 ```{r eval=FALSE}
 beazley <- read.csv(file = "data/raw/beazley_sample_2000.csv", 

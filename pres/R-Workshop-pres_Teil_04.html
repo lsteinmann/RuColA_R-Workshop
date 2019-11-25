@@ -4,12 +4,12 @@
   <title>R: data science für Archäolog*innen</title>
 
   <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <meta name="generator" content="pandoc" />
 
 
 
+  <meta name="date" content="2019-11-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -259,7 +259,6 @@ background: black;
 }
 
 slides > slide {
-display: none;
 font-family: 'Open Sans', Arial, sans-serif;
 font-size: 26px;
 color: #797979;
@@ -280,17 +279,19 @@ transition: all 0.6s ease-in-out;
 }
 
 slides > slide.far-past {
-display: none;
 }
 
 slides > slide.past {
-display: block;
 opacity: 0;
 }
 
 slides > slide.current {
 display: block;
 opacity: 1;
+z-index: 1;
+}
+slides > slide:not(.current) {
+z-index: 0;
 }
 
 slides > slide.current .auto-fadein {
@@ -305,13 +306,11 @@ background-size: 100% 100%;
 }
 
 slides > slide.next {
-display: block;
 opacity: 0;
 pointer-events: none;
 }
 
 slides > slide.far-next {
-display: none;
 }
 
 slides > slide.dark {
@@ -383,8 +382,6 @@ width: 1100px;
 
 slides.layout-widescreen > slide.far-past,
 slides.layout-faux-widescreen > slide.far-past {
-display: block;
-display: none;
 -webkit-transform: translate(-2260px);
 -moz-transform: translate(-2260px);
 -ms-transform: translate(-2260px);
@@ -418,8 +415,6 @@ pointer-events: none;
 
 slides.layout-widescreen > slide.far-next,
 slides.layout-faux-widescreen > slide.far-next {
-display: block;
-display: none;
 -webkit-transform: translate(2260px);
 -moz-transform: translate(2260px);
 -ms-transform: translate(2260px);
@@ -1350,6 +1345,13 @@ opacity: 1;
 
 .overview .slide-area {
 display: none;
+}
+slides > slide {
+background: linear-gradient(#ffffff, #ffffff 85%, #e6e6e6);
+background-color: white;
+}
+slides > slide {
+opacity: 0;
 }
 @media print {
 
@@ -3076,6 +3078,10 @@ if (document.readyState !== "loading" &&
       font-style: italic;
     }
 
+    summary {
+      display: list-item;
+    }
+
     slides > slide {
       -webkit-transition: all 0.4s ease-in-out;
       -moz-transition: all 0.4s ease-in-out;
@@ -3091,6 +3097,10 @@ if (document.readyState !== "loading" &&
       transition: opacity 0.6s ease-in 0.4s;
       opacity: 0;
     }
+/* https://github.com/ropensci/plotly/pull/524#issuecomment-468142578 */
+slide:not(.current) .plotly.html-widget{
+  display: block;
+}
 
     slides > slide:not(.nobackground):before {
       font-size: 12pt;
@@ -3109,7 +3119,7 @@ if (document.readyState !== "loading" &&
     }
   </style>
 
-  <style type="text/css">.gdbar img {width: 338px !important;height: 100px !important;margin: 8px 8px;}.gdbar {width: 400px !important;height: 120px !important;}slides > slide:not(.nobackground):before {width: 106px;height: 35px;background-size: 101px 30px;}slides > slide.title-slide hgroup h1,slides > slide hgroup h2 {color: #003761;}.superemph {text-align: center;color: #95c11f;font-style: bold;margin: auto;width: 30%;padding: 10px;vertical-align: middle;font-size: 15pt;background-color: #003761;}.bildunterschrift {font-size: 12pt;color: #003761;}</style>
+  <style type="text/css">.gdbar img {width: 338px !important;height: 100px !important;margin: 8px 8px;}.gdbar {width: 400px !important;height: 120px !important;}slides > slide:not(.nobackground):before {width: 106px;height: 35px;background-size: 101px 30px;}slides > slide.title-slide hgroup h1,slides > slide hgroup h2 {color: #003761;}.superemph {text-align: center;color: #95c11f;font-style: bold;margin: auto;width: 30%;padding: 10px;vertical-align: middle;font-size: 15pt;background-color: #003761;}.bildunterschrift {font-size: 12pt;color: #003761;}.kleiner {font-size: 12pt; }</style>
 
 </head>
 
@@ -3124,11 +3134,13 @@ if (document.readyState !== "loading" &&
       <h1 data-config-title><!-- populated from slide_config.json --></h1>
       <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
       <p data-config-presenter><!-- populated from slide_config.json --></p>
-            <p style="margin-top: 6px; margin-left: -2px;">29 Mai 2019</p>
+            <p style="margin-top: 6px; margin-left: -2px;">27 November 2019</p>
           </hgroup>
   </slide>
 
-<slide class=""><hgroup><h2>&lsquo;data wrangling&rsquo;</h2></hgroup><article  id="data-wrangling">
+<slide class=""><hgroup><h2>Datenmanipulation</h2></hgroup><article  id="datenmanipulation">
+
+<p>Oder:</p>
 
 <blockquote>
 <p>Data wrangling […] is the process of transforming and mapping data from one &ldquo;raw&rdquo; data form into another format with the intent of making it more appropriate and valuable for a variety of downstream purposes such as analytics.</p>
@@ -3136,9 +3148,9 @@ if (document.readyState !== "loading" &&
 
 <p><a href='https://en.wikipedia.org/wiki/Data_wrangling' title=''>https://en.wikipedia.org/wiki/Data_wrangling</a></p>
 
-<p>-&gt; R ist sehr gut geeignet um Daten in ein anderen Format zu bringen.</p>
+<p>-&gt; R ist sehr gut geeignet um Daten in ein anderes Format zu bringen.</p>
 
-</article></slide><slide class=""><hgroup><h2>Beispiel: Daten aus dem beazley-archive</h2></hgroup><article  id="beispiel-daten-aus-dem-beazley-archive">
+</article></slide><slide class=""><hgroup><h2>Beispiel: Originaldaten aus dem beazley-archive</h2></hgroup><article  id="beispiel-originaldaten-aus-dem-beazley-archive">
 
 <pre class = 'prettyprint lang-r'>beazley &lt;- read.csv(file = &quot;data/raw/beazley_sample_2000.csv&quot;, 
                     sep = &quot;;&quot;, 
@@ -3149,7 +3161,7 @@ str(beazley)</pre>
 
 <p>Was kann weg?</p>
 
-</article></slide><slide class=""><hgroup><h2>Beispiel: Daten aus dem beazley-archive</h2></hgroup><article  id="beispiel-daten-aus-dem-beazley-archive-1">
+</article></slide><slide class=""><hgroup><h2>Beispiel: Daten aus dem beazley-archive</h2></hgroup><article  id="beispiel-daten-aus-dem-beazley-archive">
 
 <p>Nutzliche Funktionen zum betrachten der Daten:</p>
 
@@ -3162,7 +3174,7 @@ str(x)         # atomic vector-Klassen, überblick über Elemente</pre>
 
 <p>Alles auf den ganzen data.frame ODER auf einzelne Spalten anwendbar!</p>
 
-</article></slide><slide class=""><hgroup><h2>Beispiel: Daten aus dem beazley-archive</h2></hgroup><article  id="beispiel-daten-aus-dem-beazley-archive-2">
+</article></slide><slide class=""><hgroup><h2>Beispiel: Daten aus dem beazley-archive</h2></hgroup><article  id="beispiel-daten-aus-dem-beazley-archive-1">
 
 <p>Nur benutzbare Spalten behalten:</p>
 
@@ -3384,7 +3396,7 @@ beazley$DAT_max &lt;- as.numeric(beazley$DAT_max)</pre>
 ## [131] DINOS FRAGMENT                          
 ## [132] FIGURE VASE OINOCHOE FRAGMENT           
 ## [133] DISH                                    
-## 202 Levels:  ALABASTRON ALABASTRON FRAGMENT ... VARIOUS</pre>
+## 202 Levels:  ALABASTRON ALABASTRON FRAGMENT AMPHORA ... VARIOUS</pre>
 
 </article></slide><slide class=""><hgroup><h2>Daten umformatieren: Shape.Names extrahieren</h2></hgroup><article  id="daten-umformatieren-shape.names-extrahieren">
 
@@ -3420,16 +3432,14 @@ names$V3 &lt;- gsub(names$V3, pattern = &quot;(?)&quot;,
                  replacement = &quot;&quot;, fixed = TRUE)
 unique(names$V3)</pre>
 
-<pre >##  [1] &quot;LEKYTHOS&quot;     &quot;CUP&quot;          &quot;AMPHORA&quot;      &quot;KRATER&quot;      
-##  [5] &quot;SKYPHOS&quot;      NA             &quot;STAMNOS&quot;      &quot;FRAGMENT&quot;    
-##  [9] &quot;OINOCHOE&quot;     &quot;HYDRIA&quot;       &quot;PELIKE&quot;       &quot;PLATE&quot;       
-## [13] &quot;OLPE&quot;         &quot;INCENSE&quot;      &quot;LEKANIS&quot;      &quot;PLAQUE&quot;      
-## [17] &quot;MUG&quot;          &quot;ALABASTRON&quot;   &quot;LOUTROPHOROS&quot; &quot;CHOUS&quot;       
-## [21] &quot;DINOS&quot;        &quot;PYXIS&quot;        &quot;PANATHENAIC&quot;  &quot;LID&quot;         
-## [25] &quot;PHIALE&quot;       &quot;KANTHAROS&quot;    &quot;KYATHOS&quot;      &quot;FIGURE&quot;      
-## [29] &quot;MASTOID&quot;      &quot;PSYKTER&quot;      &quot;LEBES&quot;        &quot;ASKOS&quot;       
-## [33] &quot;FRAGMENTS&quot;    &quot;IDOL&quot;         &quot;RHYTON&quot;       &quot;STAND&quot;       
-## [37] &quot;DISH&quot;</pre>
+<pre >##  [1] &quot;LEKYTHOS&quot;     &quot;CUP&quot;          &quot;AMPHORA&quot;      &quot;KRATER&quot;       &quot;SKYPHOS&quot;     
+##  [6] NA             &quot;STAMNOS&quot;      &quot;FRAGMENT&quot;     &quot;OINOCHOE&quot;     &quot;HYDRIA&quot;      
+## [11] &quot;PELIKE&quot;       &quot;PLATE&quot;        &quot;OLPE&quot;         &quot;INCENSE&quot;      &quot;LEKANIS&quot;     
+## [16] &quot;PLAQUE&quot;       &quot;MUG&quot;          &quot;ALABASTRON&quot;   &quot;LOUTROPHOROS&quot; &quot;CHOUS&quot;       
+## [21] &quot;DINOS&quot;        &quot;PYXIS&quot;        &quot;PANATHENAIC&quot;  &quot;LID&quot;          &quot;PHIALE&quot;      
+## [26] &quot;KANTHAROS&quot;    &quot;KYATHOS&quot;      &quot;FIGURE&quot;       &quot;MASTOID&quot;      &quot;PSYKTER&quot;     
+## [31] &quot;LEBES&quot;        &quot;ASKOS&quot;        &quot;FRAGMENTS&quot;    &quot;IDOL&quot;         &quot;RHYTON&quot;      
+## [36] &quot;STAND&quot;        &quot;DISH&quot;</pre>
 
 </article></slide><slide class=""><hgroup><h2>Daten umformatieren: names noch etwas mehr bereinigen</h2></hgroup><article  id="daten-umformatieren-names-noch-etwas-mehr-bereinigen">
 
@@ -3441,17 +3451,16 @@ names$V3 &lt;- gsub(names$V3, pattern = &quot;UNKNOWN&quot;,
                  replacement = &quot;NA&quot;)
 unique(names$V3)</pre>
 
-<pre >##  [1] &quot;LEKYTHOS&quot;     &quot;CUP&quot;          &quot;AMPHORA&quot;      &quot;KRATER&quot;      
-##  [5] &quot;SKYPHOS&quot;      NA             &quot;STAMNOS&quot;      &quot;FRAGMENT&quot;    
-##  [9] &quot;OINOCHOE&quot;     &quot;HYDRIA&quot;       &quot;PELIKE&quot;       &quot;PLATE&quot;       
-## [13] &quot;OLPE&quot;         &quot;INCENSE&quot;      &quot;LEKANIS&quot;      &quot;PLAQUE&quot;      
-## [17] &quot;MUG&quot;          &quot;ALABASTRON&quot;   &quot;LOUTROPHOROS&quot; &quot;CHOUS&quot;       
-## [21] &quot;DINOS&quot;        &quot;PYXIS&quot;        &quot;LID&quot;          &quot;PHIALE&quot;      
-## [25] &quot;KANTHAROS&quot;    &quot;KYATHOS&quot;      &quot;FIGURE&quot;       &quot;MASTOID&quot;     
-## [29] &quot;PSYKTER&quot;      &quot;LEBES&quot;        &quot;ASKOS&quot;        &quot;FRAGMENTS&quot;   
-## [33] &quot;IDOL&quot;         &quot;RHYTON&quot;       &quot;STAND&quot;        &quot;DISH&quot;</pre>
+<pre >##  [1] &quot;LEKYTHOS&quot;     &quot;CUP&quot;          &quot;AMPHORA&quot;      &quot;KRATER&quot;       &quot;SKYPHOS&quot;     
+##  [6] NA             &quot;STAMNOS&quot;      &quot;FRAGMENT&quot;     &quot;OINOCHOE&quot;     &quot;HYDRIA&quot;      
+## [11] &quot;PELIKE&quot;       &quot;PLATE&quot;        &quot;OLPE&quot;         &quot;INCENSE&quot;      &quot;LEKANIS&quot;     
+## [16] &quot;PLAQUE&quot;       &quot;MUG&quot;          &quot;ALABASTRON&quot;   &quot;LOUTROPHOROS&quot; &quot;CHOUS&quot;       
+## [21] &quot;DINOS&quot;        &quot;PYXIS&quot;        &quot;LID&quot;          &quot;PHIALE&quot;       &quot;KANTHAROS&quot;   
+## [26] &quot;KYATHOS&quot;      &quot;FIGURE&quot;       &quot;MASTOID&quot;      &quot;PSYKTER&quot;      &quot;LEBES&quot;       
+## [31] &quot;ASKOS&quot;        &quot;FRAGMENTS&quot;    &quot;IDOL&quot;         &quot;RHYTON&quot;       &quot;STAND&quot;       
+## [36] &quot;DISH&quot;</pre>
 
-</article></slide><slide class=""><hgroup><h2>Daten umformatieren: Neue Namen für Gefäßformen eintragen</h2></hgroup><article  id="daten-umformatieren-neue-namen-fur-gefaformen-eintragen">
+</article></slide><slide class=""><hgroup><h2>Daten umformatieren: Neue Namen für Gefäßformen eintragen</h2></hgroup><article  id="daten-umformatieren-neue-namen-für-gefäßformen-eintragen">
 
 <pre class = 'prettyprint lang-r'># Löscht Spalte 2, die wir nicht mehr brauchen
 names$V2 &lt;- NULL

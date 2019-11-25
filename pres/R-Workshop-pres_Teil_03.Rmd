@@ -1,7 +1,7 @@
 ---
 title: 'R: _data science_ für Archäolog*innen'
 author: "L. Steinmann"
-date: "29 Mai 2019"
+date: "27 November 2019"
 output:
   ioslides_presentation:
     smaller: no
@@ -31,7 +31,7 @@ Boxplot / Kastengraphik:
 boxplot(BACups)
 ```
 
-(Zum Nachlesen: <https://de.m.wikipedia.org/wiki/Box-Plot>)
+<p class="kleiner">(Zum Nachlesen: <https://de.m.wikipedia.org/wiki/Box-Plot>)</p>
 
 ## Einfache Plots (base r)
 
@@ -43,9 +43,10 @@ Unser Plot lässt sich auch noch verbessern.
 
 ```{r, echo = TRUE, eval = TRUE, fig.height=3}
 boxplot(BACups[,-6], 
-        main = "Measurements on Early and Late Bronze Age ceramic cups from Italy\n analyzed by Lukesh and Howe (1978)",
+        main = "Measurements on Early and Late Bronze Age ceramic 
+        cups from Italy analyzed by Lukesh and Howe (1978)",
         xlab = "Variable",
-        ylab = "Measurements", notch = TRUE)
+        ylab = "cm", notch = TRUE)
 grid()
 ```
 
@@ -59,11 +60,11 @@ head(BACups_melt)
 
 ## Einfache Plots (base r)
 
-```{r, echo = TRUE, eval = TRUE, fig.height=3}
+```{r, echo = TRUE, eval = TRUE, fig.height=4}
 boxplot(value ~ Phase * variable, data = BACups_melt, 
         col = c("chartreuse3", "darkblue"), las = 2)
 ```
-(zum Nachlesen: <https://www.statmethods.net/graphs/boxplot.html>)
+<p class="kleiner">(zum Nachlesen: <https://www.statmethods.net/graphs/boxplot.html>)</p>
 
 ## Einfache Plots (ggplot2)
 
@@ -73,7 +74,7 @@ ggplot(BACups_melt, aes(x = variable, y = value, fill = Phase)) +
   geom_boxplot() + theme(legend.position="top")
 ```
 
-(zum Nachlesen: <http://www.cookbook-r.com/Graphs/Plotting_distributions_(ggplot2)/>)
+<p class="kleiner">(zum Nachlesen: <http://www.cookbook-r.com/Graphs/Plotting_distributions_(ggplot2)/>)</p>
 
 ## Einfache Plots (ggplot2)
 
@@ -148,7 +149,7 @@ Barplots / Balken- oder Säulendiagramme
 ```{r, echo = TRUE, eval = TRUE, fig.height=3}
 barplot(table(beazley$Shape))
 ```
-(zum Nachlesen: <https://de.wikipedia.org/wiki/S%C3%A4ulendiagramm>)
+<p class="kleiner">(zum Nachlesen: <https://de.wikipedia.org/wiki/S%C3%A4ulendiagramm> und <https://www.statmethods.net/graphs/bar.html>)</p>
 
 ## Einfache Plots (base r)
 
@@ -173,7 +174,7 @@ barplot(sort(tbl_shape, decreasing = TRUE),
 ggplot(data = beazley, aes(x = Shape, fill = Technique)) +
   geom_bar(stat = "count")
 ```
-
+<p class="kleiner">(zum Nachlesen: <http://www.cookbook-r.com/Graphs/Bar_and_line_graphs_(ggplot2)/>)</p>
 ## Einfache Plots (ggplot2)
 
 ```{r, echo = TRUE, eval = TRUE, fig.height=3}

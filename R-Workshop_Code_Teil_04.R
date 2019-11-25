@@ -2,8 +2,8 @@
 # Daten bearbeiten
 
 
-beazley <- read.csv(file = "data/raw/beazley_sample_10000.csv", 
-                    sep = ",", 
+beazley <- read.csv(file = "data/raw/beazley_sample_2000.csv", 
+                    sep = ";", 
                     header = TRUE)
 
 

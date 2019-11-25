@@ -1,7 +1,7 @@
 ---
 title: 'R: _data science_ für Archäolog*innen'
 author: "L. Steinmann"
-date: "29 Mai 2019"
+date: "27 November 2019"
 output:
   ioslides_presentation:
     smaller: no
@@ -50,6 +50,8 @@ data(BACups)    # Erstellt automatisch das gewünschte Objekt
 head(BACups)    # head() zeigt die ersten Zeilen eines data.frames
 ```
 
+<p class="kleiner">Wer sich besonders für den Inhalt des Datensatzes interessiert kann später [hier](https://www.jstor.org/stable/529737?seq=1) oder [hier](https://www.academia.edu/30682144/Protoapennine_vs._Subapennine_Mathematical_Distinction_between_Two_Ceramics_Phases) nachlesen.</p>
+
 ## Daten laden
 
 Aus eigenen Tabellen: 
@@ -62,7 +64,8 @@ beazley <- read.csv(file = "data/prep/beazley_clean.csv",
                                    "factor"))
 ```
 
-(Außer `read.csv()` gibt es noch weitere Funktionen! Zum Nachlesen: <https://www.datacamp.com/community/tutorials/r-data-import-tutorial>)
+<p class="kleiner">(Außer `read.csv()` gibt es noch weitere Funktionen! Zum Nachlesen:
+<https://www.datacamp.com/community/tutorials/r-data-import-tutorial>)</p>>
 
 ```{r, echo = TRUE, eval = FALSE}
 head(beazley)  # head() zeigt die ersten Zeilen eines data.frames
