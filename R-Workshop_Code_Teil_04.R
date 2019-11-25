@@ -164,7 +164,7 @@ for (i in 1:nrow(places)) {
 unique(beazley$Provenance)
 
 ## Daten speichern.
-write.table(df, 
+write.table(beazley, 
             file = "data/prep/beazley_clean_v3.csv", 
             sep = ";", 
             col.names = TRUE, 
